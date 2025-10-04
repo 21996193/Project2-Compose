@@ -1,0 +1,44 @@
+
+version: '3.3'   # Use Docker Compose file format version 3.3
+services:        # Define the services (containers) to run
+  dind:                         # Service name = dind (Docker-in-Docker)
+    image: docker:24.0-dind     # Use official Docker-in-Docker image (v24.0)
+    privileged: true            # Required for DinD to run Docker commands
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs   # Enable TLS certificates for secure Docker API communication
+    volumes:
+      - dind-certs:/certs/client    # Mount shared volume to store TLS certificates
+      - dind-storage:/var/lib/docker # Cache Docker image layers for faster builds
+    networks:
+      - jenkins_net               # Connect this service to the Jenkins network
+
+  jenkins:                       # Service name = jenkins
+    image: jenkins/jenkins:lts-jdk11  # Use Jenkins LTS version with Java 11
+    privileged: true             # Allow Jenkins to run Docker commands
+    user: root                   # Run as root (needed to install Docker CLI inside Jenkins)
+    environment:
+      - DOCKER_HOST=tcp://dind:2376   # Tell Jenkins to use Docker daemon running in dind service
+      - DOCKER_CERT_PATH=/certs/client # Path to TLS certificates for Docker
+      - DOCKER_TLS_VERIFY=1           # Enforce TLS verification (secure)
+    ports:
+      - "8080:8080"              # Expose Jenkins UI on localhost:8080
+      - "50000:50000"            # Expose Jenkins agent port (for Jenkins agents/slaves)
+    volumes:
+      - jenkins_home:/var/jenkins_home # Persistent Jenkins data (jobs, plugins, configs)
+      - dind-certs:/certs/client:ro    # Mount TLS certificates read-only
+    networks:
+      - jenkins_net              # Connect Jenkins to the same network as dind
+    depends_on:
+      - dind                     # Ensure dind starts before Jenkins
+
+#volumes
+volumes:
+  jenkins_home:   # Volume to store Jenkins data persistently
+  dind-certs:     # Volume to share TLS certificates between dind and Jenkins
+  dind-storage:   # Volume to store cached Docker image layers
+
+# Networks
+networks:
+  jenkins_net:    # Define a custom bridge network
+    driver: bridge
+
