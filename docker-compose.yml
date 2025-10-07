@@ -13,7 +13,7 @@ services:        # Define the services (containers) to run
     networks:
       - jenkins_net            # Connect this service to the Jenkins network
     ports : 
-      - "2377:2375"
+      - "2376:2376"
 
   jenkins:                       # Service name = jenkins
     image: jenkins/jenkins:lts-jdk11  # Use Jenkins LTS version with Java 11
@@ -22,7 +22,7 @@ services:        # Define the services (containers) to run
     environment:
       - DOCKER_HOST=tcp://dind:2376   # Tell Jenkins to use Docker daemon running in dind service
       - DOCKER_CERT_PATH=/certs/client # Path to TLS certificates for Docker
-      - DOCKER_TLS_VERIFY=0           # Enforce TLS verification (secure)
+      - DOCKER_TLS_VERIFY=1          # Enforce TLS verification (secure)
     ports:
       - "8080:8080"              # Expose Jenkins UI on localhost:8080
       - "50000:50000"            # Expose Jenkins agent port (for Jenkins agents/slaves)
