@@ -37,9 +37,10 @@ services:        # Define the services (containers) to run
 
 #volumes
 volumes:
-  jenkins_data:   # Volume to store Jenkins data persistently
+  jenkins_home:   # Volume to store Jenkins data persistently
   dind-certs:     # Volume to share TLS certificates between dind and Jenkins
   dind-storage:   # Volume to store cached Docker image layers
+  jenkins-data:
 
 # Networks
 networks:
