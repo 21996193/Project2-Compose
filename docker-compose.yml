@@ -12,7 +12,8 @@ services:        # Define the services (containers) to run
       - jenkins-data:/var/jenkins_home
     networks:
       - jenkins_net            # Connect this service to the Jenkins network
-    ports : 2376:2376
+    ports : 
+      - "2376:2376"
 
   jenkins:                       # Service name = jenkins
     image: jenkins/jenkins:lts-jdk11  # Use Jenkins LTS version with Java 11
@@ -36,7 +37,7 @@ services:        # Define the services (containers) to run
 
 #volumes
 volumes:
-  jenkins_home:   # Volume to store Jenkins data persistently
+  jenkins_data:   # Volume to store Jenkins data persistently
   dind-certs:     # Volume to share TLS certificates between dind and Jenkins
   dind-storage:   # Volume to store cached Docker image layers
 
