@@ -11,8 +11,8 @@ services:        # Define the services (containers) to run
       - dind-storage:/var/lib/docker # Cache Docker image layers for faster builds
       - jenkins-data:/var/jenkins_home
     networks:
-      - jenkins_net               # Connect this service to the Jenkins network
-      ports : 2376:2376
+      - jenkins_net            # Connect this service to the Jenkins network
+    ports : 2376:2376
 
   jenkins:                       # Service name = jenkins
     image: jenkins/jenkins:lts-jdk11  # Use Jenkins LTS version with Java 11
