@@ -9,8 +9,10 @@ services:        # Define the services (containers) to run
     volumes:
       - dind-certs:/certs/client    # Mount shared volume to store TLS certificates
       - dind-storage:/var/lib/docker # Cache Docker image layers for faster builds
+      - jenkins-data:/var/jenkins_home
     networks:
       - jenkins_net               # Connect this service to the Jenkins network
+      ports : 2376:2376
 
   jenkins:                       # Service name = jenkins
     image: jenkins/jenkins:lts-jdk11  # Use Jenkins LTS version with Java 11
@@ -23,6 +25,7 @@ services:        # Define the services (containers) to run
     ports:
       - "8080:8080"              # Expose Jenkins UI on localhost:8080
       - "50000:50000"            # Expose Jenkins agent port (for Jenkins agents/slaves)
+      - "2376:2376"
     volumes:
       - jenkins_home:/var/jenkins_home # Persistent Jenkins data (jobs, plugins, configs)
       - dind-certs:/certs/client:ro    # Mount TLS certificates read-only
