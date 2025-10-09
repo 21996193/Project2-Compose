@@ -46,6 +46,6 @@ volumes:
 
 # Networks
 networks:
-  jenkins: {}   # Define a custom bridge network
+  jenkins:   # Define a custom bridge network
     driver: bridge
 
