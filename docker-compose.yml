@@ -14,7 +14,7 @@ services:        # Define the services (containers) to run
     volumes:
       - dind-certs:/certs/client    # Mount shared volume to store TLS certificates
       - dind-storage:/var/lib/docker # Cache Docker image layers for faster builds
-      - jenkins-data:/var/jenkins_home
+      - jenkins-data:/var/jenkins_home #optional jenkins shared data
     ports : 
       - 2376:2376
 
@@ -46,6 +46,6 @@ volumes:
 
 # Networks
 networks:
-  jenkins:    # Define a custom bridge network
+  jenkins: {}   # Define a custom bridge network
     driver: bridge
 
