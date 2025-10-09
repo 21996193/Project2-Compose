@@ -1,4 +1,4 @@
-version: '3.3'   # Use Docker Compose file format version 3.3
+version: '3.3'
 services:        # Define the services (containers) to run
   dind:                         # Service name = dind (Docker-in-Docker)
     image: docker:dind     # Use official Docker-in-Docker image (v24.0)
@@ -14,14 +14,16 @@ services:        # Define the services (containers) to run
       - docker-certs-ca:/certs/ca    # volume for certificate authority
       - docker-certs-client:/certs/client # volume for client certificate
       - jenkins-data:/var/jenkins_home #optional jenkins shared data
-    ports : 
-      - 2376:2376
+    ports: 
+      - "2376:2376"
 
   jenkins:                       # Service name = jenkins
     image: jenkins/jenkins:lts-jdk17  
     privileged: true             # Allow Jenkins to run Docker commands
     user: root                   # Run as root (needed to install Docker CLI inside Jenkins)
     restart: unless-stopped
+    networks:
+      - jenkins
     environment:
       - DOCKER_HOST=tcp://docker:2376   # Tell Jenkins to use Docker daemon running in dind service
       - DOCKER_CERT_PATH=/certs/client # Path to TLS certificates for Docker
@@ -33,17 +35,15 @@ services:        # Define the services (containers) to run
       - jenkins_data:/var/jenkins_home # Persistent Jenkins data (jobs, plugins, configs)
       - docker-certs-client:/certs/client:ro # Mount TLS certificates read-only
       - /usr/bin/docker:/usr/bin/docker
-    networks:
-      - jenkins              # Connect Jenkins to the same network as dind
-
-#volumes
-volumes:
-  docker-certs-ca: #docker certificates
-  docker-certs-client: #stores docker client certs
-  jenkins_data: #jenkins plugins, jobs, configs
+                  # Connect Jenkins to the same network as dind
 
 # Networks
 networks:
   jenkins:   # Define a custom bridge network
     driver: bridge
 
+volumes:
+  docker-certs-ca: #docker certificates
+  docker-certs-client: #stores docker client certs
+  jenkins_data: #jenkins plugins, jobs, configs
+  jenkins-data:
