@@ -2,16 +2,19 @@
 version: '3.3'   # Use Docker Compose file format version 3.3
 services:        # Define the services (containers) to run
   dind:                         # Service name = dind (Docker-in-Docker)
-    image: docker:24.0-dind     # Use official Docker-in-Docker image (v24.0)
+    image: docker:dind     # Use official Docker-in-Docker image (v24.0)
     privileged: true            # Required for DinD to run Docker commands
+    user: root
+    networks:
+     jenkins:
+      aliases:
+       - docker           # Custom Jenkins network
     environment:
       - DOCKER_TLS_CERTDIR=/certs   # Enable TLS certificates for secure Docker API communication
     volumes:
       - dind-certs:/certs/client    # Mount shared volume to store TLS certificates
       - dind-storage:/var/lib/docker # Cache Docker image layers for faster builds
       - jenkins-data:/var/jenkins_home
-    networks:
-      - jenkins_net            # Connect this service to the Jenkins network
     ports : 
       - 2376:2376
 
