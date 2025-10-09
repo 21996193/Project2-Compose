@@ -26,14 +26,14 @@ services:        # Define the services (containers) to run
       - DOCKER_HOST=tcp://docker:2376   # Tell Jenkins to use Docker daemon running in dind service
       - DOCKER_CERT_PATH=/certs/client # Path to TLS certificates for Docker
       - DOCKER_TLS_VERIFY=1          # Enforce TLS verification (secure)
-     ports:
+    ports:
       - "8080:8080"              # Expose Jenkins UI on localhost:8080
       - "50000:50000"            # Expose Jenkins agent port (for Jenkins agents/slaves)
-     volumes:
+    volumes:
       - jenkins_data:/var/jenkins_home # Persistent Jenkins data (jobs, plugins, configs)
       - docker-certs-client:/certs/client:ro # Mount TLS certificates read-only
       -/usr/bin/docker:/usr/bin/docker
-     networks:
+    networks:
       - jenkins              # Connect Jenkins to the same network as dind
 
 #volumes
