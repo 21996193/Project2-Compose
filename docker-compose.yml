@@ -32,7 +32,7 @@ services:        # Define the services (containers) to run
     volumes:
       - jenkins_data:/var/jenkins_home # Persistent Jenkins data (jobs, plugins, configs)
       - docker-certs-client:/certs/client:ro # Mount TLS certificates read-only
-      -/usr/bin/docker:/usr/bin/docker
+      - /usr/bin/docker:/usr/bin/docker
     networks:
       - jenkins              # Connect Jenkins to the same network as dind
 
