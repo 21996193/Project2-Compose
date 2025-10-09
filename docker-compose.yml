@@ -33,7 +33,7 @@ services:        # Define the services (containers) to run
       - jenkins_home:/var/jenkins_home # Persistent Jenkins data (jobs, plugins, configs)
       - dind-certs:/certs/client:ro    # Mount TLS certificates read-only
     networks:
-      - jenkins_net              # Connect Jenkins to the same network as dind
+      - jenkins              # Connect Jenkins to the same network as dind
     depends_on:
       - dind                     # Ensure dind starts before Jenkins
 
