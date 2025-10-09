@@ -19,7 +19,7 @@ services:        # Define the services (containers) to run
 
   jenkins:                       # Service name = jenkins
     image: jenkins/jenkins:lts-jdk17  
-    privileged: true             # Allow Jenkins to run Docker commands
+    privileged: true             
     container_name: jenkins
     user: root                   # Run as root (needed to install Docker CLI inside Jenkins)
     restart: unless-stopped
