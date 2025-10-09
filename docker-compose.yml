@@ -23,7 +23,7 @@ services:        # Define the services (containers) to run
     privileged: true             # Allow Jenkins to run Docker commands
     user: root                   # Run as root (needed to install Docker CLI inside Jenkins)
     environment:
-      - DOCKER_HOST=tcp://dind:2376   # Tell Jenkins to use Docker daemon running in dind service
+      - DOCKER_HOST=tcp://docker:2376   # Tell Jenkins to use Docker daemon running in dind service
       - DOCKER_CERT_PATH=/certs/client # Path to TLS certificates for Docker
       - DOCKER_TLS_VERIFY=1          # Enforce TLS verification (secure)
     ports:
@@ -46,6 +46,6 @@ volumes:
 
 # Networks
 networks:
-  jenkins_net:    # Define a custom bridge network
+  jenkins:    # Define a custom bridge network
     driver: bridge
 
