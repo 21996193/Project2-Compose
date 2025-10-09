@@ -2,7 +2,7 @@ version: '3.3'
 services:        # Define the services (containers) to run
   dind:                         # Service name = dind (Docker-in-Docker)
     image: docker:dind     # Use official Docker-in-Docker image (v24.0)
-    privileged: true            # Required for DinD to run Docker commands
+    privileged: true            
     user: root
     networks:
      jenkins:
