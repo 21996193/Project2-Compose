@@ -13,7 +13,7 @@ services:        # Define the services (containers) to run
     networks:
       - jenkins_net            # Connect this service to the Jenkins network
     ports : 
-      - 2377:2376
+      - 2376:2376
 
   jenkins:                       # Service name = jenkins
     image: custom-jenkins:lts  
@@ -26,7 +26,6 @@ services:        # Define the services (containers) to run
     ports:
       - "8080:8080"              # Expose Jenkins UI on localhost:8080
       - "50000:50000"            # Expose Jenkins agent port (for Jenkins agents/slaves)
-      - "2376:2376"
     volumes:
       - jenkins_home:/var/jenkins_home # Persistent Jenkins data (jobs, plugins, configs)
       - dind-certs:/certs/client:ro    # Mount TLS certificates read-only
